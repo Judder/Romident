@@ -1,3 +1,4 @@
+#include <sys/stat.h>
 #include <stdio.h>
 #include <string.h>
 #include <dirent.h>
@@ -32,9 +33,9 @@ int checkfile(char *fn)
 
 int is_directory(char *fn)
 {
-   struct dirent **files;
-   int file_select = NULL;
-   if (scandir(fn, &files, file_select, alphasort) > 0) return 1;
+//   struct dirent **files;
+//   int file_select();
+//   if (scandir(fn, &files, file_select, alphasort) > 0) return 1;
    return 0;
 };
 
@@ -60,16 +61,17 @@ int get_file_size(char *fn)
    return f.size;
 };
 */
-int get_file_size(char *fn)
+int get_file_size(char *filename)
 {
-   FILE *fp;
-   long file_size;
-   fp = fopen(fn, "r");
-   if (fp == NULL) return -1;
-   if (fseek(fp, 0, SEEK_END) != 0) return -1;
-   file_size = ftell(fp);
-   fclose(fp);
-   return file_size;
+    struct stat st;
+
+    if (stat(filename, &st) == 0)
+        return st.st_size;
+
+    fprintf(stderr, "Cannot determine size of %s: \n",
+            filename);
+
+    return -1;
 };
 
 void get_zipfilename(char *s, char *d)

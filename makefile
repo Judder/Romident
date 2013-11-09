@@ -1,9 +1,10 @@
 CC = gcc
 AS = nasmw
 
-INCLUDES = /usr/include/i386-linux-gnu/sys/
+#INCLUDES = /usr/include/i386-linux-gnu/sys/
 
-FLAGS = -O3 -march=pentium -fstrength-reduce -fomit-frame-pointer -I $(INCLUDES)
+#FLAGS = -O3 -march=pentium -fstrength-reduce -fomit-frame-pointer -I $(INCLUDES)
+FLAGS = -O3 -march=pentium -fstrength-reduce -fomit-frame-pointer 
 
 OBJS =	unzip.o inflate.o crc32.o rifunct.o
 	

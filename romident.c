@@ -117,12 +117,13 @@ int ident_file(char *path, char *fn, int size)
    FILE *f;
    char fpath[256];
 
-   sprintf(fpath, "%s\\%s", path, fn);
+   //sprintf(fpath, "%s\\%s", path, fn);
+   sprintf(fpath, "%s", fn);
    if (size == -1) {
-      //printf("fpath = %s\n", fpath);
+      printf("fpath = %s\n", fpath);
       size = get_file_size(fpath);
       if (size < 1) {
-         printf("Error, '%s' size incorrect !\n", fn);
+         printf("Error, '%s' size incorrect (%s) !\n", fn, size);
          return 1;
       };
    };

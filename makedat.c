@@ -5,7 +5,10 @@
 */
 
 #include <stdio.h>
-#include <dir.h>
+#include <string.h>
+#include <malloc.h>
+#include <dirent.h>
+#include <sys/types.h>
 #include "unzip.h"
 #include "defs.h"
 
@@ -141,17 +144,22 @@ int adddat_zip(char *fn)
 
 int adddat_dir(char *fn)
 {
-   struct ffblk F;
+   DIR *dir;
+   struct dirent *ent;
    char path[256], path2[256];
    sprintf(path, "%s\\*.*", fn);
-//   printf("Directory to ident = '%s'\n", path);
-   if (!findfirst(path, &F, FA_ARCH|FA_DIREC|FA_RDONLY)) {
-      do {
-         sprintf(path2, "%s\\%s", fn, F.ff_name);
+   if ((dir = opendir(path)) != NULL) {
+      /* ident all the files and directories within directory */
+      while ((ent = readdir(dir)) != NULL) {
+         sprintf(path2, "%s\\%s", fn, ent->d_name);
          ident(path2);
-      } while(!findnext(&F));
-   };
-   return 0;
+      }
+      closedir (dir);
+   } else {
+      /* could not open directory */
+      printf ("Could not open directory %s/*.*", path);
+      return -1;
+   }
 }
 
 int ident(char *fn)
@@ -168,7 +176,7 @@ int ident(char *fn)
 //   printf("ident called with '%s'\n", fn);
 
    if (fn[strlen(fn)-1]!='.') {
-      if ((status&FA_DIREC)!=FA_DIREC) {
+      if (!opendir(fn)) {
          l = strlen(fn);
          if (l>4) {
             sprintf(fncopy, "%s", fn);

@@ -1,0 +1,10 @@
+*.o
+*.rom
+*.gam
+*.bin
+*.hex
+*.lst
+*.txt
+romident
+riexport
+makedat
